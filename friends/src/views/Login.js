@@ -2,11 +2,14 @@ import React, {useState} from 'react';
 import styled from 'styled-components';
 import {connect} from 'react-redux';
 
+import { login as doLogin} from '../actions/loginActions'
+
 export function LoginView(props){
     const [cred, setCred] = useState({
         username: "",
         password: ""
     })
+    const [loginError, setLoginError] = useState('')
 
     const handleInput = event => {
         setCred({
@@ -15,8 +18,20 @@ export function LoginView(props){
         })
     }
 
+    const loginSubmit = event => {
+        event.preventDefault();
+        props.doLogin(cred)
+            .then((...args) => {
+                console.log("success", args)
+                props.history.push('/');
+            })
+            .catch(err => {
+                setLoginError(err);
+            })
+    }
+
     return (
-        <Login>
+        <Login onSubmit={event => loginSubmit(event)}>
             <h1>Login</h1>
             <form>
                 <input
@@ -29,7 +44,7 @@ export function LoginView(props){
                     value={cred.password}
                     onChange={handleInput} 
                 />
-                <button onClick={event => event.preventDefault()}>Login</button>
+                <button type="submit">Login</button>
             </form>
         </Login>
     )
@@ -49,4 +64,6 @@ const Login = styled.div`
     }
 `
 
-export default connect(null, {})(LoginView)
+export default connect(null, {
+    doLogin,
+})(LoginView)

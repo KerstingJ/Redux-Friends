@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../utils/axiosWithExtra';
 
 export const LOGGING_IN = "LOGGING_IN";
 export const LOGGING_IN_SUCCESS = "LOGGING_IN_SUCCESS";
@@ -11,18 +11,22 @@ export const login = credentials => dispatch => {
         type: LOGGING_IN
     })
 
-    axios
-        .get('/api/login/')
+    return axios
+        .post('/api/login/', credentials)
         .then(res => {
-            console.log(res)
+            window.localStorage.setItem('friendsToken', res.data.payload)
             dispatch({
-                type: LOGGING_IN_SUCCESS
+                type: LOGGING_IN_SUCCESS,
+                payload: null
             })
+
+
         })
         .catch(err => {
-            console.log(err)
+            console.log("caught err in action", err)
             dispatch({
-                type: LOGGING_IN_FAILURE
+                type: LOGGING_IN_FAILURE,
+                payload: err
             })
         })
 }

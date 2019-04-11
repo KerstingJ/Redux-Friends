@@ -2,7 +2,12 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 export default props => {
-    let isAuthed = true;
+    const {component: Component, ...rest} = props;
 
-    return <Route {...props} />
+    let token = window.localStorage.getItem('friendsToken')
+    return (
+        <Route {...rest} render={props => {
+            return token ? <Component {...props} /> : <Redirect to="/login" />
+        }} />
+    )
 }
