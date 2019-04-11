@@ -1,15 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {connect} from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import { login as doLogin} from '../actions/loginActions'
 
 export function LoginView(props){
+
     const [cred, setCred] = useState({
         username: "",
         password: ""
     })
-    const [loginError, setLoginError] = useState('')
 
     const handleInput = event => {
         setCred({
@@ -26,13 +27,14 @@ export function LoginView(props){
                 props.history.push('/');
             })
             .catch(err => {
-                setLoginError(err);
+                console.log(err)
             })
     }
 
     return (
         <Login onSubmit={event => loginSubmit(event)}>
             <h1>Login</h1>
+            {props.loginError && <div>{props.loginError}</div>}
             <form>
                 <input
                     name="username"
@@ -64,6 +66,10 @@ const Login = styled.div`
     }
 `
 
-export default connect(null, {
+export default connect(state => ({
+    token: state.login.token,
+    loginError: state.login.error,
+    isLoggedIn: state.login.isLoggedIn
+}), {
     doLogin,
 })(LoginView)

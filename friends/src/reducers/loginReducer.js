@@ -1,16 +1,18 @@
 import {LOGGING_IN, LOGGING_IN_SUCCESS, LOGGING_IN_FAILURE} from '../actions/loginActions.js'
 
 const initialState = {
-    token: null,
-    isLogginIn: false,
-    error: ''
+    token: window.localStorage.getItem('friendsToken') || null,
+    isLoggingIn: false,
+    error: '',
+    isLoggedIn: false
 }
 
 
 const caseLoggingIn = state => ({
     ...state,
-    isLogginIn: true,
-    error: ''
+    isLoggingIn: true,
+    error: '',
+    isLoggedIn: false
 })
 
 const caseLoggingInSuccess = (state, action) => {
@@ -18,18 +20,20 @@ const caseLoggingInSuccess = (state, action) => {
     return ({
         ...state,
         token,
-        isLogginIn: false,
-        error: ''
+        isLoggingIn: false,
+        error: '',
+        isLoggedIn: true
     })
 }
 
 const caseLoggingInFailure = (state, action) => {
-    let message = action.payload;
+    let message = action.payload.message
     return ({
         ...state,
         token: null,
-        isLogginIn: false,
-        error: message
+        isLoggingIn: false,
+        error: message,
+        isLoggedIn: false
     })
 }
 

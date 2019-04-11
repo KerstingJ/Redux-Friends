@@ -19,8 +19,6 @@ export const login = credentials => dispatch => {
                 type: LOGGING_IN_SUCCESS,
                 payload: null
             })
-
-
         })
         .catch(err => {
             console.log("caught err in action", err)
