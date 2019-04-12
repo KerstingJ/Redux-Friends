@@ -1,5 +1,22 @@
-import React from 'react'
+import React, {useEffect} from 'react';
+import { connect } from 'react-redux';
+import { fetchFriends } from '../actions/index'
 
-export default props => {
-    return <div>This is where my friends list would go</div>
+const FriendsList = props => {
+
+    useEffect(()=>{
+        props.fetchFriends()
+    }, [])
+
+    return (
+        <div>
+            {props.friends.length}
+        </div>
+    )
 }
+
+export default connect(state => ({
+    friends: state.friends.friends
+}), {
+    fetchFriends
+})(FriendsList)
